@@ -1,59 +1,66 @@
 import { useState } from "react";
-
+import Navbar from "./Navbar"; 
 export default function App() {
 
+  const [page, setPage] = useState("home");
   const [tasks, setTasks] = useState([]);
-  
   const [input, setInput] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [editInput, setEditInput] = useState("");
 
-  const [currentTaskId, setCurrentTaskId] = useState(null);
-
-
-  function handleTask(isUpdate) {
-    if (input.trim() === "") return; 
-
-    if(isUpdate && currentTaskId !== null){
-      const updatedTasks = tasks.map((task) => {
-        if(task.id === currentTaskId){
-          return { ...task, text: input };
-        }
-        return task;
-      })
-      setTasks(updatedTasks);
-      setInput("");
-      setCurrentTaskId(null);
-      return;
-    }
+  function addTask() {
+    if (input.trim() === "") return;
 
     const newTask = {
-      id: Date.now(), 
+      id: Date.now(),
       text: input,
     };
 
-    setTasks([newTask, ...tasks]); 
-    setInput(""); 
+    setTasks([newTask, ...tasks]);
+    setInput("");
   }
 
- 
   function deleteTask(id) {
-    setTasks(tasks.filter((task) => task.id !== id)); 
+    setTasks(tasks.filter((task) => task.id !== id));
+  }
+
+  function editTask(task) {
+    setEditId(task.id);
+    setEditInput(task.text);
+  }
+
+  function saveTask(id) {
+    if (editInput.trim() === "") return;
+
+    const task = tasks.find((task) => task.id === id);
+
+    const updatedTask = {
+      ...task,
+      text: editInput,
+    };
+
+    setTasks([
+      updatedTask,
+      ...tasks.filter((task) => task.id !== id),
+    ]);
+
+    setEditId(null);
+    setEditInput("");
+  }
+
+  function cancelEdit() {
+    setEditId(null);
+    setEditInput("");
   }
 
   function handleKeyDown(e) {
-    if (e.key === "Enter") handleTask(isUpdate);
+    if (e.key === "Enter") {
+      addTask();
+    }
   }
-
-  function updateTask(id){
-    const task = tasks.filter((task) => task.id === id)[0];
-    setInput(task.text);
-    setCurrentTaskId(id);
-  }
-
-  const isUpdate = tasks.some((task) => task.id === currentTaskId);
-
   return (
     <div className="todo-container">
-      <h1>My To-Do List</h1>
+      <h1>To-Do List</h1>
 
       <div className="input-row">
         <input
@@ -64,8 +71,9 @@ export default function App() {
           placeholder="Add a new task..."
           className="task-input"
         />
-        <button onClick={() => handleTask(isUpdate)} className="add-button">
-          {isUpdate ? "Update" : "Add"}
+
+        <button onClick={addTask} className="add-button">
+          Add
         </button>
       </div>
 
@@ -75,19 +83,48 @@ export default function App() {
         <ul className="task-list">
           {tasks.map((task) => (
             <li key={task.id} className="task-item">
-              <span>{task.text}</span>
-               <button
-                onClick={() => updateTask(task.id)}
-                className="edit-button"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => deleteTask(task.id)}
-                className="delete-button"
-              >
-                Delete
-              </button>
+              {editId === task.id ? (
+                <>
+                  <input
+                    type="text"
+                    value={editInput}
+                    onChange={(e) => setEditInput(e.target.value)}
+                    className="task-input"
+                  />
+
+                  <button
+                    onClick={() => saveTask(task.id)}
+                    className="edit-button"
+                  >
+                    Save
+                  </button>
+
+                  <button
+                    onClick={cancelEdit}
+                    className="delete-button"
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span>{task.text}</span>
+
+                  <button
+                    onClick={() => editTask(task)}
+                    className="edit-button"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => deleteTask(task.id)}
+                    className="delete-button"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
             </li>
           ))}
         </ul>
