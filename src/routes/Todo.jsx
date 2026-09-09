@@ -10,13 +10,13 @@ export default function Todo() {
   const [editingId, setEditingId] = useState(null);
   const [editInput, setEditInput] = useState("");
   const [search, setSearch] = useState("");
-  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
- function handleTask() {
+  function handleTask() {
     if (input.trim() === "") return;
 
     const isDuplicate = tasks.some(
@@ -65,35 +65,31 @@ export default function Todo() {
     if (e.key === "Enter") saveEdit(id);
   }
 
-  function handleSearch() {
-    setSearch(searchInput);
-  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (search.trim().length >= 2 || search.trim().length === 0) {
+        setDebouncedSearch(search);
+      }
+    }, 400);
 
-  function handleSearchKeyDown(e) {
-    if (e.key === "Enter") handleSearch();
-  }
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const visibleTasks = tasks.filter((task) =>
-    task.text.toLowerCase().includes(search.toLowerCase())
+    task.text.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
 
   return (
     <div className="todo-container">
       <h1>My To-Do List</h1>
 
-      <div className="input-row">
-        <input
-          type="text"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          onKeyDown={handleSearchKeyDown}
-          placeholder="Search tasks..."
-          className="search-input"
-        />
-        <button onClick={handleSearch} className="search-button">
-          Search
-        </button>
-      </div>
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search tasks..."
+        className="search-input"
+      />
 
       <div className="input-row">
         <input
