@@ -327,3 +327,44 @@ body {
   border-radius: 6px;
   border: 1px solid #ccc;
 }
+/* ================= responsive ================= */
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 10px 0;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .sidebar-nav a {
+    padding: 10px 14px;
+    white-space: nowrap;
+  }
+
+.content-area {
+  margin-left: 0;
+}
+
+.main-content {
+  padding: 16px;
+}
+
+  .todo-container {
+    max-width: 100%;
+    margin: 20px auto;
+  }
+
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-actions {
+    align-self: flex-end;
+  }
+}
