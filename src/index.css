@@ -4,7 +4,6 @@ body {
   font-family: sans-serif;
 }
 
-/* ---------- layout: sidebar + main content ---------- */
 .app-layout {
   display: flex;
   min-height: 100vh;
@@ -17,7 +16,6 @@ body {
   color: white;
   padding: 20px 0;
 }
-
 
 .sidebar-title {
   text-align: center;
@@ -41,6 +39,7 @@ body {
 .sidebar-nav a:hover {
   background-color: #4caf50;
 }
+
 .sidebar-nav a.active {
   background-color: #4caf50;
 }
@@ -50,7 +49,6 @@ body {
   padding: 20px;
 }
 
-/* ---------- todo page ---------- */
 .todo-container {
   max-width: 400px;
   margin: 50px auto;
@@ -187,6 +185,12 @@ body {
   text-align: center;
 }
 
+.users-page {
+  max-width: 850px;
+  margin: 50px auto;
+  text-align: center;
+}
+
 /* ---------- users page (table) ---------- */
 .user-table {
   width: 100%;
@@ -196,14 +200,16 @@ body {
   background-color: white;
   border-radius: 6px;
   overflow: hidden;
+  border: 1px solid #ddd;
 }
 
 .user-table th,
 .user-table td {
   text-align: left;
-  padding: 10px 14px;
-  border-bottom: 1px solid #eee;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 .user-table th {
@@ -220,6 +226,7 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  display: block;
 }
 
 /* ---------- pagination ---------- */

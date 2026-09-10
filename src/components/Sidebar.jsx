@@ -8,6 +8,7 @@ export default function Sidebar() {
         <NavLink to="/" end>Home</NavLink>
         <NavLink to="/todo">Todo</NavLink>
         <NavLink to="/about">About Us</NavLink>
+        <NavLink to="/users">Users</NavLink>
         <NavLink to="/contact">Contact</NavLink>
       </nav>
     </div>

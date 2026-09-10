@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
+import useLocalStorage from "../useLocalStorage";
 
 export default function Todo() {
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem("tasks");
-    return saved ? JSON.parse(saved) : [];
-  });
+  // tasks ab useLocalStorage hook se aa rahe hain
+  // (localStorage padhna/likhna sab is hook ke andar ho raha hai)
+  const [tasks, setTasks] = useLocalStorage("tasks", []);
 
   const [input, setInput] = useState("");
   const [editingId, setEditingId] = useState(null);
@@ -12,23 +12,26 @@ export default function Todo() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
   function handleTask() {
-    if (input.trim() === "") return;
+    if (input.trim() === "") {
+      alert("Please add a task first!");
+      return;
+    }
 
     const isDuplicate = tasks.some(
       (task) => task.text.toLowerCase() === input.trim().toLowerCase()
     );
 
     if (isDuplicate) {
-      alert("This task already exists in the list!");
+      alert("This task is already in your list!");
       return;
     }
 
-    const newTask = { id: Date.now(), text: input };
+    const newTask = {
+      id: Date.now(),
+      text: input,
+    };
+
     setTasks([newTask, ...tasks]);
     setInput("");
   }
@@ -53,9 +56,11 @@ export default function Todo() {
 
   function saveEdit(id) {
     if (editInput.trim() === "") return;
+
     const taskToUpdate = tasks.find((task) => task.id === id);
     const updatedTask = { ...taskToUpdate, text: editInput };
     const otherTasks = tasks.filter((task) => task.id !== id);
+
     setTasks([updatedTask, ...otherTasks]);
     setEditingId(null);
     setEditInput("");
@@ -87,7 +92,6 @@ export default function Todo() {
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search tasks..."
         className="search-input"
       />
 
@@ -131,6 +135,7 @@ export default function Todo() {
                 </li>
               );
             }
+
             return (
               <li key={task.id} className="task-item">
                 <span>{task.text}</span>
