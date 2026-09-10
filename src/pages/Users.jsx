@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { fetchUsers } from "../api/users";
 
 const LIMIT = 10;
 
@@ -13,23 +14,12 @@ export default function Users() {
   const totalPages = Math.ceil(total / LIMIT);
 
   useEffect(() => {
-    async function fetchUsers() {
+    async function loadUsers() {
       setLoading(true);
       setError("");
 
-      const skip = (page - 1) * LIMIT;
-
       try {
-        const response = await fetch(
-          `https://dummyjson.com/users?limit=${LIMIT}&skip=${skip}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Something went wrong while fetching users");
-        }
-
-        const data = await response.json();
-
+        const data = await fetchUsers(page, LIMIT);
         setUsers(data?.users ?? []);
         setTotal(data.total);
       } catch (err) {
@@ -39,7 +29,7 @@ export default function Users() {
       }
     }
 
-    fetchUsers();
+    loadUsers();
   }, [page]);
 
   function goToPage(p) {
@@ -59,7 +49,6 @@ export default function Users() {
     setPageInput("");
   }
 
-  // Arrow keys reversed: ArrowDown = increase page, ArrowUp = decrease page
   function handleJumpKeyDown(e) {
     if (e.key === "Enter") {
       handleJumpToPage();
@@ -90,36 +79,38 @@ export default function Users() {
         <p className="empty-text">{error}</p>
       ) : (
         <>
-          <table className="user-table">
-            <thead>
-              <tr>
-                <th>Photo</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Age</th>
-                <th>Phone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td>
-                    <img
-                      src={user.image}
-                      alt={user.firstName}
-                      className="user-avatar"
-                    />
-                  </td>
-                  <td>
-                    {user.firstName} {user.lastName}
-                  </td>
-                  <td>{user.email}</td>
-                  <td>{user.age}</td>
-                  <td>{user.phone}</td>
+          <div className="table-scroll">
+            <table className="user-table">
+              <thead>
+                <tr>
+                  <th>Photo</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Age</th>
+                  <th>Phone</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id}>
+                    <td>
+                      <img
+                        src={user.image}
+                        alt={user.firstName}
+                        className="user-avatar"
+                      />
+                    </td>
+                    <td>
+                      {user.firstName} {user.lastName}
+                    </td>
+                    <td>{user.email}</td>
+                    <td>{user.age}</td>
+                    <td>{user.phone}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="pagination">
             <button onClick={() => goToPage(page - 1)} disabled={page === 1}>
@@ -141,8 +132,7 @@ export default function Users() {
               value={pageInput}
               onChange={(e) => setPageInput(e.target.value)}
               onKeyDown={handleJumpKeyDown}
-              placeholder=""
-              style={{ width: "50px", padding: "6px", textAlign: "center" }}
+              className="page-jump-input"
             />
           </div>
         </>

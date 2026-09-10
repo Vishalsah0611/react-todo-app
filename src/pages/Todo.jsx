@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import useLocalStorage from "../useLocalStorage";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Todo() {
-  // tasks ab useLocalStorage hook se aa rahe hain
-  // (localStorage padhna/likhna sab is hook ke andar ho raha hai)
   const [tasks, setTasks] = useLocalStorage("tasks", []);
 
   const [input, setInput] = useState("");
@@ -92,6 +90,7 @@ export default function Todo() {
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search tasks..."
         className="search-input"
       />
 
@@ -126,25 +125,29 @@ export default function Todo() {
                     onKeyDown={(e) => handleEditKeyDown(e, task.id)}
                     className="edit-input"
                   />
-                  <button onClick={() => saveEdit(task.id)} className="save-button">
-                    Save
-                  </button>
-                  <button onClick={cancelEdit} className="cancel-button">
-                    Cancel
-                  </button>
+                  <div className="task-actions">
+                    <button onClick={() => saveEdit(task.id)} className="save-button">
+                      Save
+                    </button>
+                    <button onClick={cancelEdit} className="cancel-button">
+                      Cancel
+                    </button>
+                  </div>
                 </li>
               );
             }
 
             return (
               <li key={task.id} className="task-item">
-                <span>{task.text}</span>
-                <button onClick={() => startEdit(task)} className="edit-button">
-                  Edit
-                </button>
-                <button onClick={() => deleteTask(task.id)} className="delete-button">
-                  Delete
-                </button>
+                <span className="task-text">{task.text}</span>
+                <div className="task-actions">
+                  <button onClick={() => startEdit(task)} className="edit-button">
+                    Edit
+                  </button>
+                  <button onClick={() => deleteTask(task.id)} className="delete-button">
+                    Delete
+                  </button>
+                </div>
               </li>
             );
           })}

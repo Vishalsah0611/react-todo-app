@@ -5,16 +5,23 @@ body {
 }
 
 .app-layout {
-  display: flex;
   min-height: 100vh;
 }
 
+/* ---------- sidebar: fixed so it never scrolls with the page ---------- */
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 200px;
+  height: 100vh;
+  overflow-y: auto;
   flex-shrink: 0;
   background-color: #333;
   color: white;
   padding: 20px 0;
+  box-sizing: border-box;
+  z-index: 10;
 }
 
 .sidebar-title {
@@ -44,11 +51,39 @@ body {
   background-color: #4caf50;
 }
 
+/* main content sits to the right of the fixed sidebar */
+.main-content {
+  margin-left: 200px;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.content-area {
+  margin-left: 200px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background-color: #333;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+.topbar-title {
+  margin: 0;
+  font-size: 20px;
+  color: white;
+}
+
 .main-content {
   flex: 1;
   padding: 20px;
+  box-sizing: border-box;
 }
-
+/* ---------- todo page ---------- */
 .todo-container {
   max-width: 400px;
   margin: 50px auto;
@@ -56,15 +91,17 @@ body {
 }
 
 .input-row {
+  display: flex;
   margin-bottom: 20px;
 }
 
 .task-input {
+  flex: 1;
   padding: 10px;
   font-size: 16px;
-  width: 60%;
   border-radius: 6px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .search-input {
@@ -86,6 +123,7 @@ body {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .add-button:hover {
@@ -101,14 +139,33 @@ body {
   padding: 0;
 }
 
+/* ---------- alignment fix: text and buttons are now only TWO flex
+   children (task-text + task-actions), so task-actions always sticks
+   to the right edge no matter how long the task text is ---------- */
 .task-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   padding: 10px 14px;
   margin-bottom: 8px;
   background-color: #f4f4f4;
   border-radius: 6px;
+}
+
+.task-text {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .delete-button {
@@ -128,7 +185,6 @@ body {
 .edit-button {
   padding: 6px 12px;
   font-size: 14px;
-  margin-left: 8px;
   background-color: #3498db;
   color: white;
   border: none;
@@ -142,17 +198,16 @@ body {
 
 .edit-input {
   flex: 1;
+  min-width: 0;
   padding: 8px;
   font-size: 14px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  margin-right: 8px;
 }
 
 .save-button {
   padding: 6px 12px;
   font-size: 14px;
-  margin-left: 8px;
   background-color: #4caf50;
   color: white;
   border: none;
@@ -167,7 +222,6 @@ body {
 .cancel-button {
   padding: 6px 12px;
   font-size: 14px;
-  margin-left: 8px;
   background-color: #95a5a6;
   color: white;
   border: none;
@@ -192,6 +246,10 @@ body {
 }
 
 /* ---------- users page (table) ---------- */
+.table-scroll {
+  overflow-x: auto;
+}
+
 .user-table {
   width: 100%;
   max-width: 800px;
@@ -229,9 +287,9 @@ body {
   display: block;
 }
 
-/* ---------- pagination ---------- */
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 16px;
@@ -260,4 +318,12 @@ body {
 .pagination-info {
   font-size: 14px;
   color: #444;
+}
+
+.page-jump-input {
+  width: 50px;
+  padding: 6px;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
