@@ -52,13 +52,6 @@ body {
 }
 
 /* main content sits to the right of the fixed sidebar */
-.main-content {
-  margin-left: 200px;
-  min-height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
 .content-area {
   margin-left: 200px;
   min-height: 100vh;
@@ -68,6 +61,9 @@ body {
 
 .topbar {
   background-color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 5;
   padding: 20px;
   flex-shrink: 0;
 }

@@ -124,16 +124,6 @@ export default function Users() {
             <button onClick={() => goToPage(page + 1)} disabled={page === totalPages}>
               Next
             </button>
-
-            <input
-              type="number"
-              min="1"
-              max={totalPages}
-              value={pageInput}
-              onChange={(e) => setPageInput(e.target.value)}
-              onKeyDown={handleJumpKeyDown}
-              className="page-jump-input"
-            />
           </div>
         </>
       )}
