@@ -1,0 +1,453 @@
+body {
+  margin: 0;
+  background-color: #f2f4f7;
+  font-family: sans-serif;
+}
+
+.app-layout {
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+  background-color: #333;
+  color: white;
+  padding: 20px 0;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.sidebar-title {
+  text-align: center;
+  margin: 0 0 20px;
+  font-size: 20px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-nav a {
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  font-size: 16px;
+}
+
+.sidebar-nav a:hover {
+  background-color: #4caf50;
+}
+
+.sidebar-nav a.active {
+  background-color: #4caf50;
+}
+
+.content-area {
+  margin-left: 200px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background-color: #333;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+.topbar-title {
+  margin: 0;
+  font-size: 20px;
+  color: white;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.todo-container {
+  max-width: 400px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.input-row {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.task-input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.search-input {
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 16px;
+}
+
+.add-button {
+  padding: 10px 16px;
+  font-size: 16px;
+  margin-left: 8px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.add-button:hover {
+  background-color: #43a047;
+}
+
+.empty-text {
+  color: #888;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background-color: #f4f4f4;
+  border-radius: 6px;
+}
+
+.task-text {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.delete-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.edit-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #2980b9;
+}
+
+.edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.save-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #43a047;
+}
+
+.cancel-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #7f8c8d;
+}
+
+.page-container {
+  max-width: 500px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.users-page {
+  max-width: 1000px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+/* ---------- users page (table) ---------- */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.user-table th,
+.user-table td {
+  text-align: left;
+  padding: 10px 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-table th:nth-child(1),
+.user-table td:nth-child(1) {
+  width: 8%;
+}
+
+.user-table th:nth-child(2),
+.user-table td:nth-child(2) {
+  width: 16%;
+}
+
+.user-table th:nth-child(3),
+.user-table td:nth-child(3) {
+  width: 30%;
+}
+
+.user-table th:nth-child(4),
+.user-table td:nth-child(4) {
+  width: 7%;
+}
+
+.user-table th:nth-child(5),
+.user-table td:nth-child(5) {
+  width: 16%;
+}
+
+.user-table th:nth-child(6),
+.user-table td:nth-child(6) {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.user-table th {
+  background-color: #333;
+  color: white;
+  font-weight: 600;
+}
+
+.user-table tr:hover {
+  background-color: #f4f4f4;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: block;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #444;
+}
+
+.page-jump-input {
+  width: 50px;
+  padding: 6px;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.users-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.users-add-link {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.table-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.view-button {
+  padding: 6px 10px;
+  font-size: 13px;
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.view-button:hover {
+  background-color: #732d91;
+}
+
+.table-actions .edit-button,
+.table-actions .delete-button {
+  padding: 6px 10px;
+  font-size: 13px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 10px 0;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .sidebar-nav a {
+    padding: 10px 14px;
+    white-space: nowrap;
+  }
+
+  .content-area {
+    margin-left: 0;
+  }
+
+  .main-content {
+    padding: 16px;
+  }
+
+  .todo-container {
+    max-width: 100%;
+    margin: 20px auto;
+  }
+
+  .task-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .task-actions {
+    align-self: flex-end;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .table-actions {
+    gap: 4px;
+  }
+
+  .table-actions .edit-button,
+  .table-actions .delete-button,
+  .view-button {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+}
