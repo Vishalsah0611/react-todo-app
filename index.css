@@ -4,11 +4,14 @@ body {
   font-family: sans-serif;
 }
 
+/* ================= APP LAYOUT ================= */
+
 .app-layout {
   min-height: 100vh;
 }
 
-/* ---------- sidebar: fixed so it never scrolls with the page ---------- */
+/* ================= SIDEBAR ================= */
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -51,7 +54,8 @@ body {
   background-color: #4caf50;
 }
 
-/* content-area sits to the right of the fixed sidebar, holds topbar + page content stacked */
+/* ================= CONTENT AREA ================= */
+
 .content-area {
   margin-left: 200px;
   min-height: 100vh;
@@ -59,7 +63,8 @@ body {
   flex-direction: column;
 }
 
-/* ---------- topbar: flush against the sidebar, same dark colour, forms an L shape ---------- */
+/* ================= TOPBAR ================= */
+
 .topbar {
   position: sticky;
   top: 0;
@@ -75,13 +80,16 @@ body {
   color: white;
 }
 
+/* ================= MAIN CONTENT ================= */
+
 .main-content {
   flex: 1;
   padding: 20px;
   box-sizing: border-box;
 }
 
-/* ---------- todo page ---------- */
+/* ================= TODO PAGE ================= */
+
 .todo-container {
   max-width: 400px;
   margin: 50px auto;
@@ -137,9 +145,6 @@ body {
   padding: 0;
 }
 
-/* ---------- alignment fix: text and buttons are now only TWO flex
-   children (task-text + task-actions), so task-actions always sticks
-   to the right edge no matter how long the task text is ---------- */
 .task-item {
   display: flex;
   justify-content: space-between;
@@ -231,26 +236,51 @@ body {
   background-color: #7f8c8d;
 }
 
+/* ================= FORM PAGE ================= */
+
 .page-container {
   max-width: 500px;
   margin: 50px auto;
   text-align: center;
 }
 
+/* ================= USERS PAGE ================= */
+
 .users-page {
-  max-width: 850px;
+  width: 100%;
+  max-width: 1000px;
   margin: 50px auto;
   text-align: center;
+  box-sizing: border-box;
 }
 
-/* ---------- users page (table) ---------- */
+/* ================= USERS HEADER ================= */
+
+.users-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.users-add-link {
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* ================= TABLE SCROLL ================= */
+
 .table-scroll {
+  width: 100%;
   overflow-x: auto;
 }
 
+/* ================= USER TABLE ================= */
+
 .user-table {
   width: 100%;
-  max-width: 800px;
+  min-width: 850px;
   margin: 0 auto;
   border-collapse: collapse;
   background-color: white;
@@ -278,12 +308,62 @@ body {
   background-color: #f4f4f4;
 }
 
+/* ================= USER AVATAR ================= */
+
 .user-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   display: block;
 }
+
+/* ================= ACTION COLUMN ================= */
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.user-table th:last-child,
+.user-table td:last-child {
+  width: 180px;
+}
+
+/* ================= VIEW BUTTON ================= */
+
+.view-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.view-button:hover {
+  background-color: #732d91;
+}
+
+/* ================= EDIT & DELETE BUTTON ================= */
+
+.table-actions .edit-button,
+.table-actions .delete-button {
+  padding: 6px 12px;
+  font-size: 13px;
+  text-decoration: none;
+  display: inline-block;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ================= PAGINATION ================= */
 
 .pagination {
   display: flex;
@@ -326,51 +406,8 @@ body {
   border: 1px solid #ccc;
 }
 
-/* ---------- users page header + actions column ---------- */
-.users-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
+/* ================= RESPONSIVE ================= */
 
-.users-add-link {
-  text-decoration: none;
-  display: inline-block;
-}
-
-.table-actions {
-  display: flex;
-  gap: 6px;
-  flex-wrap: nowrap;
-}
-
-.view-button {
-  padding: 6px 12px;
-  font-size: 13px;
-  background-color: #8e44ad;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.view-button:hover {
-  background-color: #732d91;
-}
-
-.table-actions .edit-button,
-.table-actions .delete-button {
-  padding: 6px 12px;
-  font-size: 13px;
-  text-decoration: none;
-  display: inline-block;
-}
-
-/* ================= responsive ================= */
 @media (max-width: 768px) {
   .sidebar {
     position: relative;
@@ -409,5 +446,18 @@ body {
 
   .task-actions {
     align-self: flex-end;
+  }
+
+  .users-page {
+    max-width: 100%;
+    margin: 20px auto;
+  }
+
+  .user-table {
+    min-width: 850px;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
   }
 }

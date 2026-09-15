@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchUsers, searchUsers, fetchUsersRaw, deleteUser } from "../../api/users";
+import { fetchUsers, fetchUsersRaw, fetchAllUsersRaw, deleteUser } from "../../api/users";
 
 const LIMIT = 10;
 
@@ -13,10 +13,10 @@ export default function UsersList() {
 
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [allUsersCache, setAllUsersCache] = useState(null);
 
   const totalPages = Math.ceil(total / LIMIT);
 
-  // wait 400ms after the user stops typing before actually searching
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search.trim());
@@ -25,7 +25,6 @@ export default function UsersList() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  // whenever the search term changes, always go back to page 1
   useEffect(() => {
     setPage(1);
   }, [debouncedSearch]);
@@ -40,14 +39,30 @@ export default function UsersList() {
     setError("");
 
     try {
-      // if there's a search term, hit the search endpoint instead of the
-      // plain list endpoint
-      const data = debouncedSearch
-        ? await searchUsers(debouncedSearch, page, LIMIT)
-        : await fetchUsers(page, LIMIT);
+      if (debouncedSearch) {
+        let all = allUsersCache;
+        if (!all) {
+          const data = await fetchAllUsersRaw();
+          all = data?.users ?? [];
+          setAllUsersCache(all);
+        }
 
-      setUsers(data?.users ?? []);
-      setTotal(data?.total ?? 0);
+        const q = debouncedSearch.toLowerCase();
+        const matches = all.filter((user) => {
+          const fullName = `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.toLowerCase();
+          const email = (user?.email ?? "").toLowerCase();
+          const phone = (user?.phone ?? "").toLowerCase();
+          return fullName.includes(q) || email.includes(q) || phone.includes(q);
+        });
+
+        const start = (page - 1) * LIMIT;
+        setUsers(matches.slice(start, start + LIMIT));
+        setTotal(matches.length);
+      } else {
+        const data = await fetchUsers(page, LIMIT);
+        setUsers(data?.users ?? []);
+        setTotal(data?.total ?? 0);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -65,8 +80,6 @@ export default function UsersList() {
       setUsers(remaining);
       setTotal((prev) => Math.max(prev - 1, 0));
 
-      // pull in one more user from just past this page, so the table
-      // still shows a full page of 10 instead of dropping to 9
       await backfillOneUser(remaining);
     } catch (err) {
       alert(err.message);
@@ -74,11 +87,10 @@ export default function UsersList() {
   }
 
   async function backfillOneUser(currentUsers) {
-    // only bother backfilling on the plain (non-search) list
     if (debouncedSearch) return;
 
     const skip = (page - 1) * LIMIT + currentUsers.length;
-    if (skip >= total) return; // nothing left after this page to pull in
+    if (skip >= total) return;
 
     try {
       const data = await fetchUsersRaw(skip, 1);
@@ -87,7 +99,6 @@ export default function UsersList() {
         setUsers((prev) => [...prev, nextUser]);
       }
     } catch {
-      // if this fails, it's not critical — the list just shows 9 instead of 10
     }
   }
 
@@ -109,7 +120,7 @@ export default function UsersList() {
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search users by name..."
+        placeholder="Search users by name, email or phone..."
         className="search-input"
       />
 
