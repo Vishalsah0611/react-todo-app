@@ -18,7 +18,6 @@ export default function UserForm() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(userSchema),
-    // sensible defaults so the "select" always has a valid starting value
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -30,7 +29,6 @@ export default function UserForm() {
     },
   });
 
-  // in edit mode, fetch the existing user and pre-fill the form
   useEffect(() => {
     if (!isEditMode) return;
 
@@ -50,10 +48,6 @@ export default function UserForm() {
     });
   }, [id, isEditMode, reset]);
 
-  // this only runs when zod validation PASSES (react-hook-form guarantees
-  // that) — if validation fails, handleSubmit stops here automatically,
-  // the errors object gets filled, and the fields keep whatever the user
-  // typed (nothing is cleared).
   async function onSubmit(data) {
     try {
       if (isEditMode) {
@@ -62,12 +56,9 @@ export default function UserForm() {
         await createUser(data);
       }
 
-      // success: clear the form and go back to the users list
       reset();
       navigate("/users");
     } catch (err) {
-      // API failed even though validation passed — keep the user's
-      // input so they don't have to retype everything
       alert(err.message);
     }
   }
@@ -78,7 +69,9 @@ export default function UserForm() {
 
       <form className="user-form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="form-field">
-          <label htmlFor="firstName">Name</label>
+          <label htmlFor="firstName">
+            Name <span className="required-star">*</span>
+          </label>
           <input
             id="firstName"
             type="text"
@@ -91,7 +84,9 @@ export default function UserForm() {
         </div>
 
         <div className="form-field">
-          <label htmlFor="lastName">Last Name</label>
+          <label htmlFor="lastName">
+            Last Name <span className="required-star">*</span>
+          </label>
           <input
             id="lastName"
             type="text"
@@ -104,7 +99,9 @@ export default function UserForm() {
         </div>
 
         <div className="form-field">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">
+            Email <span className="required-star">*</span>
+          </label>
           <input
             id="email"
             type="email"
@@ -115,7 +112,9 @@ export default function UserForm() {
         </div>
 
         <div className="form-field">
-          <label htmlFor="contact">Contact</label>
+          <label htmlFor="contact">
+            Contact <span className="required-star">*</span>
+          </label>
           <input
             id="contact"
             type="text"
@@ -128,7 +127,9 @@ export default function UserForm() {
         </div>
 
         <div className="form-field">
-          <label htmlFor="age">Age</label>
+          <label htmlFor="age">
+            Age <span className="required-star">*</span>
+          </label>
           <input
             id="age"
             type="number"
@@ -139,7 +140,9 @@ export default function UserForm() {
         </div>
 
         <div className="form-field">
-          <label htmlFor="address">Address</label>
+          <label htmlFor="address">
+            Address <span className="required-star">*</span>
+          </label>
           <textarea
             id="address"
             rows="3"
@@ -152,7 +155,9 @@ export default function UserForm() {
         </div>
 
         <div className="form-field">
-          <label htmlFor="gender">Gender</label>
+          <label htmlFor="gender">
+            Gender <span className="required-star">*</span>
+          </label>
           <select
             id="gender"
             className={errors.gender ? "input-error" : ""}
@@ -172,7 +177,13 @@ export default function UserForm() {
 
         <div className="form-actions">
           <button type="submit" className="save-button" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : "Save"}
+            {isSubmitting
+              ? isEditMode
+                ? "Updating..."
+                : "Adding..."
+              : isEditMode
+              ? "Update"
+              : "Add"}
           </button>
           <button
             type="button"

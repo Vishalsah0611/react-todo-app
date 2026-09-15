@@ -1,7 +1,12 @@
 .user-form {
-  max-width: 500px;
+  max-width: 520px;
   margin: 0 auto;
   text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  box-sizing: border-box;
 }
 
 .form-field {
@@ -13,49 +18,66 @@
   margin-bottom: 6px;
   font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: var(--ink);
 }
 
 .form-field input,
 .form-field select,
 .form-field textarea {
   width: 100%;
-  padding: 10px;
+  padding: 10px 12px;
   font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 1px solid var(--border);
   box-sizing: border-box;
   font-family: inherit;
+  background: var(--bg);
+  color: var(--ink);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--accent);
+  background: var(--surface);
 }
 
 /* red border on the field that failed validation */
 .form-field input.input-error,
 .form-field select.input-error,
 .form-field textarea.input-error {
-  border-color: #e74c3c;
+  border-color: var(--brick);
 }
 
 .form-error {
   margin: 6px 0 0;
   font-size: 13px;
-  color: #e74c3c;
+  color: var(--brick);
 }
 
 .form-actions {
   display: flex;
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 26px;
 }
 
 .form-actions button {
-  padding: 10px 20px;
+  padding: 11px 22px;
   font-size: 15px;
+  font-weight: 600;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
 .form-actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.required-star {
+  color: var(--brick);
+  margin-left: 2px;
+  font-weight: bold;
 }

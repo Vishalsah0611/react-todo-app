@@ -1,7 +1,47 @@
+:root {
+  --bg: #eef2ec;
+  --surface: #ffffff;
+  --surface-dark: #1f2a22;
+  --surface-dark-soft: #2a3830;
+  --ink: #1b241d;
+  --ink-soft: #5c6b5f;
+  --border: #dbe3da;
+  --accent: #e2a33d;
+  --accent-ink: #2a1e08;
+  --moss: #4c6b57;
+  --moss-dark: #3b5544;
+  --brick: #c1442e;
+  --brick-dark: #a3371f;
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  background-color: #f2f4f7;
-  font-family: sans-serif;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2 {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ================= APP LAYOUT ================= */
@@ -16,48 +56,58 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
+  width: 210px;
   height: 100vh;
   overflow-y: auto;
   flex-shrink: 0;
-  background-color: #333;
-  color: white;
-  padding: 20px 0;
+  background-color: var(--surface-dark);
+  color: #eef2ec;
+  padding: 28px 0;
   box-sizing: border-box;
   z-index: 10;
 }
 
 .sidebar-title {
-  text-align: center;
-  margin: 0 0 20px;
-  font-size: 20px;
+  text-align: left;
+  margin: 0 0 28px;
+  padding: 0 24px;
+  font-size: 21px;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .sidebar-nav a {
-  color: white;
+  color: #c9d3c9;
   text-decoration: none;
-  padding: 12px 20px;
-  font-size: 16px;
+  padding: 11px 24px;
+  font-size: 15px;
+  border-left: 3px solid transparent;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
 }
 
 .sidebar-nav a:hover {
-  background-color: #4caf50;
+  background-color: var(--surface-dark-soft);
+  color: #ffffff;
 }
 
 .sidebar-nav a.active {
-  background-color: #4caf50;
+  background-color: var(--surface-dark-soft);
+  border-left-color: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
 }
 
 /* ================= CONTENT AREA ================= */
 
 .content-area {
-  margin-left: 200px;
+  margin-left: 210px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -69,80 +119,100 @@ body {
   position: sticky;
   top: 0;
   z-index: 5;
-  background-color: #333;
-  padding: 20px;
+  background-color: var(--surface-dark);
+  padding: 18px 28px;
   flex-shrink: 0;
+  border-bottom: 1px solid var(--surface-dark-soft);
 }
 
 .topbar-title {
   margin: 0;
-  font-size: 20px;
-  color: white;
+  font-size: 18px;
+  color: #ffffff;
 }
 
 /* ================= MAIN CONTENT ================= */
 
 .main-content {
   flex: 1;
-  padding: 20px;
+  padding: 32px;
   box-sizing: border-box;
 }
 
 /* ================= TODO PAGE ================= */
 
 .todo-container {
-  max-width: 400px;
-  margin: 50px auto;
+  max-width: 440px;
+  margin: 20px auto;
   text-align: center;
+}
+
+.todo-container h1 {
+  margin-bottom: 24px;
 }
 
 .input-row {
   display: flex;
   margin-bottom: 20px;
+  gap: 8px;
 }
 
 .task-input {
   flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 11px 14px;
+  font-size: 15px;
+  font-family: inherit;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
   box-sizing: border-box;
+}
+
+.task-input:focus {
+  border-color: var(--accent);
 }
 
 .search-input {
-  padding: 10px;
+  padding: 11px 14px;
   font-size: 14px;
+  font-family: inherit;
   width: 100%;
   box-sizing: border-box;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  margin-bottom: 18px;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
 }
 
 .add-button {
-  padding: 10px 16px;
-  font-size: 16px;
-  margin-left: 8px;
-  background-color: #4caf50;
-  color: white;
+  padding: 11px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: var(--accent);
+  color: var(--accent-ink);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius);
   cursor: pointer;
   flex-shrink: 0;
+  transition: background-color 0.15s;
 }
 
 .add-button:hover {
-  background-color: #43a047;
+  background-color: #cf9130;
 }
 
 .empty-text {
-  color: #888;
+  color: var(--ink-soft);
 }
 
 .task-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .task-item {
@@ -150,10 +220,12 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 12px 16px;
   margin-bottom: 8px;
-  background-color: #f4f4f4;
-  border-radius: 6px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: left;
 }
 
 .task-text {
@@ -172,84 +244,113 @@ body {
 }
 
 .delete-button {
-  padding: 6px 12px;
-  font-size: 14px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  padding: 7px 13px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--brick);
+  border: 1px solid var(--brick);
+  border-radius: var(--radius);
   cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .delete-button:hover {
-  background-color: #c0392b;
+  background-color: var(--brick);
+  color: #ffffff;
+}
+
+.delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: transparent;
+  color: var(--brick);
+}
+
+.table-actions a[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .edit-button {
-  padding: 6px 12px;
-  font-size: 14px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  padding: 7px 13px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--moss);
+  border: 1px solid var(--moss);
+  border-radius: var(--radius);
   cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .edit-button:hover {
-  background-color: #2980b9;
+  background-color: var(--moss);
+  color: #ffffff;
 }
 
 .edit-input {
   flex: 1;
   min-width: 0;
-  padding: 8px;
+  padding: 9px 12px;
   font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  font-family: inherit;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
 }
 
 .save-button {
-  padding: 6px 12px;
-  font-size: 14px;
-  background-color: #4caf50;
-  color: white;
+  padding: 7px 13px;
+  font-size: 13px;
+  font-weight: 600;
+  background-color: var(--accent);
+  color: var(--accent-ink);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius);
   cursor: pointer;
 }
 
 .save-button:hover {
-  background-color: #43a047;
+  background-color: #cf9130;
 }
 
 .cancel-button {
-  padding: 6px 12px;
-  font-size: 14px;
-  background-color: #95a5a6;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  padding: 7px 13px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .cancel-button:hover {
-  background-color: #7f8c8d;
+  background-color: var(--bg);
+  color: var(--ink);
 }
 
 /* ================= FORM PAGE ================= */
 
 .page-container {
-  max-width: 500px;
-  margin: 50px auto;
+  max-width: 520px;
+  margin: 20px auto;
   text-align: center;
+}
+
+.page-container h1 {
+  margin-bottom: 20px;
 }
 
 /* ================= USERS PAGE ================= */
 
 .users-page {
   width: 100%;
-  max-width: 1000px;
-  margin: 50px auto;
+  max-width: 1040px;
+  margin: 20px auto;
   text-align: center;
   box-sizing: border-box;
 }
@@ -257,14 +358,20 @@ body {
 /* ================= USERS HEADER ================= */
 
 .users-header {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
+}
+
+.users-header h1 {
+  margin: 0;
 }
 
 .users-add-link {
+  position: absolute;
+  right: 0;
   text-decoration: none;
   display: inline-block;
 }
@@ -274,6 +381,7 @@ body {
 .table-scroll {
   width: 100%;
   overflow-x: auto;
+  border-radius: var(--radius);
 }
 
 /* ================= USER TABLE ================= */
@@ -283,38 +391,44 @@ body {
   min-width: 850px;
   margin: 0 auto;
   border-collapse: collapse;
-  background-color: white;
-  border-radius: 6px;
+  background-color: var(--surface);
+  border-radius: var(--radius);
   overflow: hidden;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
 }
 
 .user-table th,
 .user-table td {
   text-align: left;
-  padding: 12px 14px;
-  border: 1px solid #ddd;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
   font-size: 14px;
   white-space: nowrap;
 }
 
 .user-table th {
-  background-color: #333;
-  color: white;
+  background-color: var(--surface-dark);
+  color: #eef2ec;
   font-weight: 600;
+  font-size: 13px;
 }
 
-.user-table tr:hover {
-  background-color: #f4f4f4;
+.user-table tr:last-child td {
+  border-bottom: none;
+}
+
+.user-table tr:hover td {
+  background-color: var(--bg);
 }
 
 /* ================= USER AVATAR ================= */
 
 .user-avatar {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: block;
+  border: 1px solid var(--border);
 }
 
 /* ================= ACTION COLUMN ================= */
@@ -322,40 +436,43 @@ body {
 .table-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex-wrap: nowrap;
   white-space: nowrap;
 }
 
 .user-table th:last-child,
 .user-table td:last-child {
-  width: 180px;
+  width: 190px;
 }
 
 /* ================= VIEW BUTTON ================= */
 
 .view-button {
-  padding: 6px 12px;
+  padding: 7px 13px;
   font-size: 13px;
-  background-color: #8e44ad;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
   flex-shrink: 0;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .view-button:hover {
-  background-color: #732d91;
+  background-color: var(--bg);
+  color: var(--ink);
 }
 
 /* ================= EDIT & DELETE BUTTON ================= */
 
 .table-actions .edit-button,
 .table-actions .delete-button {
-  padding: 6px 12px;
+  padding: 7px 13px;
   font-size: 13px;
   text-decoration: none;
   display: inline-block;
@@ -370,40 +487,44 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 16px;
-  margin-top: 20px;
+  gap: 14px;
+  margin-top: 22px;
 }
 
 .pagination button {
-  padding: 8px 16px;
+  padding: 8px 15px;
   font-size: 14px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  font-weight: 500;
+  background-color: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   cursor: pointer;
+  transition: background-color 0.15s;
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #2980b9;
+  background-color: var(--surface-dark);
+  color: #ffffff;
+  border-color: var(--surface-dark);
 }
 
 .pagination button:disabled {
-  background-color: #bdc3c7;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
 .pagination-info {
   font-size: 14px;
-  color: #444;
+  color: var(--ink-soft);
 }
 
 .page-jump-input {
   width: 50px;
   padding: 6px;
   text-align: center;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
 }
 
 /* ================= RESPONSIVE ================= */
@@ -413,7 +534,11 @@ body {
     position: relative;
     width: 100%;
     height: auto;
-    padding: 10px 0;
+    padding: 14px 0;
+  }
+
+  .sidebar-title {
+    margin-bottom: 12px;
   }
 
   .sidebar-nav {
@@ -424,6 +549,13 @@ body {
   .sidebar-nav a {
     padding: 10px 14px;
     white-space: nowrap;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .sidebar-nav a.active {
+    border-left: none;
+    border-bottom-color: var(--accent);
   }
 
   .content-area {
@@ -431,12 +563,12 @@ body {
   }
 
   .main-content {
-    padding: 16px;
+    padding: 18px;
   }
 
   .todo-container {
     max-width: 100%;
-    margin: 20px auto;
+    margin: 10px auto;
   }
 
   .task-item {
@@ -450,7 +582,13 @@ body {
 
   .users-page {
     max-width: 100%;
-    margin: 20px auto;
+    margin: 10px auto;
+  }
+
+  .users-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
   }
 
   .user-table {

@@ -1,65 +1,74 @@
-import axios from "axios";
-
-const BASE_URL = "https://dummyjson.com/users";
+import axiosClient from "./axiosClient";
 
 export async function fetchUsers(page, limit) {
   const skip = (page - 1) * limit;
 
-  const response = await axios.get(BASE_URL, {
-    params: { limit, skip },
-  });
-
-  return response?.data;
+  try {
+    const response = await axiosClient.get("/users", {
+      params: { limit, skip },
+    });
+    return response?.data;
+  } catch (err) {
+    throw new Error("Something went wrong while fetching users");
+  }
 }
 
 export async function fetchUsersRaw(skip, limit) {
-  const response = await axios.get(BASE_URL, {
-    params: { limit, skip },
-  });
-
-  return response?.data;
+  try {
+    const response = await axiosClient.get("/users", {
+      params: { limit, skip },
+    });
+    return response?.data;
+  } catch (err) {
+    throw new Error("Something went wrong while fetching users");
+  }
 }
 
 export async function searchUsers(query, page, limit) {
   const skip = (page - 1) * limit;
 
-  const response = await axios.get(`${BASE_URL}/search`, {
-    params: { q: query, limit, skip },
-  });
-
-  return response?.data;
-}
-
-export async function fetchAllUsersRaw() {
-  const response = await axios.get(BASE_URL, {
-    params: { limit: 0 },
-  });
-
-  return response?.data;
+  try {
+    const response = await axiosClient.get("/users/search", {
+      params: { q: query, limit, skip },
+    });
+    return response?.data;
+  } catch (err) {
+    throw new Error("Something went wrong while searching users");
+  }
 }
 
 export async function fetchUserById(id) {
-  const response = await axios.get(`${BASE_URL}/${id}`);
-  return response?.data;
+  try {
+    const response = await axiosClient.get(`/users/${id}`);
+    return response?.data;
+  } catch (err) {
+    throw new Error("Could not find this user");
+  }
 }
 
 export async function createUser(data) {
-  const response = await axios.post(`${BASE_URL}/add`, data, {
-    headers: { "Content-Type": "application/json" },
-  });
-
-  return response?.data;
+  try {
+    const response = await axiosClient.post("/users/add", data);
+    return response?.data;
+  } catch (err) {
+    throw new Error("Something went wrong while adding the user");
+  }
 }
 
 export async function updateUser(id, data) {
-  const response = await axios.patch(`${BASE_URL}/${id}`, data, {
-    headers: { "Content-Type": "application/json" },
-  });
-
-  return response?.data;
+  try {
+    const response = await axiosClient.patch(`/users/${id}`, data);
+    return response?.data;
+  } catch (err) {
+    throw new Error("Something went wrong while updating the user");
+  }
 }
 
 export async function deleteUser(id) {
-  const response = await axios.delete(`${BASE_URL}/${id}`);
-  return response?.data;
+  try {
+    const response = await axiosClient.delete(`/users/${id}`);
+    return response?.data;
+  } catch (err) {
+    throw new Error("Something went wrong while deleting the user");
+  }
 }

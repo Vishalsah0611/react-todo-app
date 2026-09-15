@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// reusable checks for space problems — used on every text field below
 const noLeadingOrTrailingSpace = (value) => value.trim() === value;
 const noDoubleSpaces = (value) => !/\s{2,}/.test(value);
 
@@ -35,9 +34,6 @@ export const userSchema = z.object({
       "Contact number can only contain digits, spaces, hyphens, and a leading +"
     )
     .refine((val) => {
-      // strip out the formatting characters and check there are enough
-      // ACTUAL digits — this is what stops something like "-------"
-      // (only hyphens, no digits) from passing
       const digitsOnly = val.replace(/[+\s-]/g, "");
       return /^\d{7,15}$/.test(digitsOnly);
     }, "Enter a valid contact number (7 to 15 digits)")
