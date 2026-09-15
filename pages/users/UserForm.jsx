@@ -18,18 +18,19 @@ export default function UserForm() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(userSchema),
-  
+    // sensible defaults so the "select" always has a valid starting value
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
       contact: "",
+      age: "",
       address: "",
       gender: "",
     },
   });
 
-
+  // in edit mode, fetch the existing user and pre-fill the form
   useEffect(() => {
     if (!isEditMode) return;
 
@@ -39,6 +40,7 @@ export default function UserForm() {
         lastName: user.lastName || "",
         email: user.email || "",
         contact: user.phone || "",
+        age: user.age || "",
         address:
           typeof user.address === "string"
             ? user.address
@@ -48,6 +50,10 @@ export default function UserForm() {
     });
   }, [id, isEditMode, reset]);
 
+  // this only runs when zod validation PASSES (react-hook-form guarantees
+  // that) — if validation fails, handleSubmit stops here automatically,
+  // the errors object gets filled, and the fields keep whatever the user
+  // typed (nothing is cleared).
   async function onSubmit(data) {
     try {
       if (isEditMode) {
@@ -56,10 +62,12 @@ export default function UserForm() {
         await createUser(data);
       }
 
+      // success: clear the form and go back to the users list
       reset();
       navigate("/users");
     } catch (err) {
-
+      // API failed even though validation passed — keep the user's
+      // input so they don't have to retype everything
       alert(err.message);
     }
   }
@@ -120,6 +128,17 @@ export default function UserForm() {
         </div>
 
         <div className="form-field">
+          <label htmlFor="age">Age</label>
+          <input
+            id="age"
+            type="number"
+            className={errors.age ? "input-error" : ""}
+            {...register("age")}
+          />
+          {errors.age && <p className="form-error">{errors.age.message}</p>}
+        </div>
+
+        <div className="form-field">
           <label htmlFor="address">Address</label>
           <textarea
             id="address"
@@ -139,7 +158,9 @@ export default function UserForm() {
             className={errors.gender ? "input-error" : ""}
             {...register("gender")}
           >
-            <option value="">Select gender</option>
+            <option value="" disabled hidden>
+              Select gender
+            </option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>

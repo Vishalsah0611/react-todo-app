@@ -8,6 +8,7 @@ body {
   min-height: 100vh;
 }
 
+/* ---------- sidebar: fixed so it never scrolls with the page ---------- */
 .sidebar {
   position: fixed;
   top: 0;
@@ -50,6 +51,7 @@ body {
   background-color: #4caf50;
 }
 
+/* content-area sits to the right of the fixed sidebar, holds topbar + page content stacked */
 .content-area {
   margin-left: 200px;
   min-height: 100vh;
@@ -57,6 +59,7 @@ body {
   flex-direction: column;
 }
 
+/* ---------- topbar: flush against the sidebar, same dark colour, forms an L shape ---------- */
 .topbar {
   position: sticky;
   top: 0;
@@ -78,6 +81,7 @@ body {
   box-sizing: border-box;
 }
 
+/* ---------- todo page ---------- */
 .todo-container {
   max-width: 400px;
   margin: 50px auto;
@@ -133,6 +137,9 @@ body {
   padding: 0;
 }
 
+/* ---------- alignment fix: text and buttons are now only TWO flex
+   children (task-text + task-actions), so task-actions always sticks
+   to the right edge no matter how long the task text is ---------- */
 .task-item {
   display: flex;
   justify-content: space-between;
@@ -231,7 +238,7 @@ body {
 }
 
 .users-page {
-  max-width: 1000px;
+  max-width: 850px;
   margin: 50px auto;
   text-align: center;
 }
@@ -243,6 +250,8 @@ body {
 
 .user-table {
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   border-collapse: collapse;
   background-color: white;
   border-radius: 6px;
@@ -253,42 +262,9 @@ body {
 .user-table th,
 .user-table td {
   text-align: left;
-  padding: 10px 10px;
+  padding: 12px 14px;
   border: 1px solid #ddd;
   font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.user-table th:nth-child(1),
-.user-table td:nth-child(1) {
-  width: 8%;
-}
-
-.user-table th:nth-child(2),
-.user-table td:nth-child(2) {
-  width: 16%;
-}
-
-.user-table th:nth-child(3),
-.user-table td:nth-child(3) {
-  width: 30%;
-}
-
-.user-table th:nth-child(4),
-.user-table td:nth-child(4) {
-  width: 7%;
-}
-
-.user-table th:nth-child(5),
-.user-table td:nth-child(5) {
-  width: 16%;
-}
-
-.user-table th:nth-child(6),
-.user-table td:nth-child(6) {
-  width: 1%;
   white-space: nowrap;
 }
 
@@ -350,6 +326,7 @@ body {
   border: 1px solid #ccc;
 }
 
+/* ---------- users page header + actions column ---------- */
 .users-header {
   display: flex;
   justify-content: center;
@@ -367,11 +344,10 @@ body {
   display: flex;
   gap: 6px;
   flex-wrap: nowrap;
-  justify-content: flex-start;
 }
 
 .view-button {
-  padding: 6px 10px;
+  padding: 6px 12px;
   font-size: 13px;
   background-color: #8e44ad;
   color: white;
@@ -388,12 +364,13 @@ body {
 
 .table-actions .edit-button,
 .table-actions .delete-button {
-  padding: 6px 10px;
+  padding: 6px 12px;
   font-size: 13px;
   text-decoration: none;
   display: inline-block;
 }
 
+/* ================= responsive ================= */
 @media (max-width: 768px) {
   .sidebar {
     position: relative;
@@ -432,22 +409,5 @@ body {
 
   .task-actions {
     align-self: flex-end;
-  }
-
-  .user-table th,
-  .user-table td {
-    padding: 10px 8px;
-    font-size: 13px;
-  }
-
-  .table-actions {
-    gap: 4px;
-  }
-
-  .table-actions .edit-button,
-  .table-actions .delete-button,
-  .view-button {
-    padding: 5px 8px;
-    font-size: 12px;
   }
 }

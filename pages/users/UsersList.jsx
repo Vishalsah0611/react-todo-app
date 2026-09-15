@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchUsers, deleteUser } from "../../api/users";
+import { fetchUsers, searchUsers, fetchUsersRaw, deleteUser } from "../../api/users";
 
 const LIMIT = 10;
 
@@ -11,20 +11,43 @@ export default function UsersList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
   const totalPages = Math.ceil(total / LIMIT);
+
+  // wait 400ms after the user stops typing before actually searching
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  // whenever the search term changes, always go back to page 1
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     loadUsers();
-  }, [page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, debouncedSearch]);
 
   async function loadUsers() {
     setLoading(true);
     setError("");
 
     try {
-      const data = await fetchUsers(page, LIMIT);
+      // if there's a search term, hit the search endpoint instead of the
+      // plain list endpoint
+      const data = debouncedSearch
+        ? await searchUsers(debouncedSearch, page, LIMIT)
+        : await fetchUsers(page, LIMIT);
+
       setUsers(data?.users ?? []);
-      setTotal(data.total);
+      setTotal(data?.total ?? 0);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -37,9 +60,34 @@ export default function UsersList() {
 
     try {
       await deleteUser(id);
-      setUsers((prev) => prev.filter((user) => user.id !== id));
+
+      const remaining = users.filter((user) => user.id !== id);
+      setUsers(remaining);
+      setTotal((prev) => Math.max(prev - 1, 0));
+
+      // pull in one more user from just past this page, so the table
+      // still shows a full page of 10 instead of dropping to 9
+      await backfillOneUser(remaining);
     } catch (err) {
       alert(err.message);
+    }
+  }
+
+  async function backfillOneUser(currentUsers) {
+    // only bother backfilling on the plain (non-search) list
+    if (debouncedSearch) return;
+
+    const skip = (page - 1) * LIMIT + currentUsers.length;
+    if (skip >= total) return; // nothing left after this page to pull in
+
+    try {
+      const data = await fetchUsersRaw(skip, 1);
+      const nextUser = data?.users?.[0];
+      if (nextUser) {
+        setUsers((prev) => [...prev, nextUser]);
+      }
+    } catch {
+      // if this fails, it's not critical — the list just shows 9 instead of 10
     }
   }
 
@@ -57,10 +105,20 @@ export default function UsersList() {
         </Link>
       </div>
 
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search users by name..."
+        className="search-input"
+      />
+
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p className="empty-text">{error}</p>
+      ) : users.length === 0 ? (
+        <p className="empty-text">No users found.</p>
       ) : (
         <>
           <div className="table-scroll">
@@ -80,17 +138,17 @@ export default function UsersList() {
                   <tr key={user.id}>
                     <td>
                       <img
-                        src={user.image}
-                        alt={user.firstName}
+                        src={user?.image}
+                        alt={user?.firstName}
                         className="user-avatar"
                       />
                     </td>
                     <td>
-                      {user.firstName} {user.lastName}
+                      {user?.firstName} {user?.lastName}
                     </td>
-                    <td>{user.email}</td>
-                    <td>{user.age}</td>
-                    <td>{user.phone}</td>
+                    <td>{user?.email}</td>
+                    <td>{user?.age}</td>
+                    <td>{user?.phone}</td>
                     <td>
                       <div className="table-actions">
                         <Link to={`/users/${user.id}`} className="view-button">
@@ -114,6 +172,9 @@ export default function UsersList() {
           </div>
 
           <div className="pagination">
+            <button onClick={() => goToPage(1)} disabled={page === 1}>
+              First
+            </button>
             <button onClick={() => goToPage(page - 1)} disabled={page === 1}>
               Prev
             </button>
@@ -124,6 +185,9 @@ export default function UsersList() {
 
             <button onClick={() => goToPage(page + 1)} disabled={page === totalPages}>
               Next
+            </button>
+            <button onClick={() => goToPage(totalPages)} disabled={page === totalPages}>
+              Last
             </button>
           </div>
         </>
